@@ -1,0 +1,45 @@
+{
+    "name": "Prefect Bioinfo Dev",
+    "image": "mcr.microsoft.com/devcontainers/python:3.12-bookworm",
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:1": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "/workspaces/${localWorkspaceFolderBasename}/.devcontainer/extensions/codeviz.codeviz-1.6.9.vsix",
+                "/workspaces/${localWorkspaceFolderBasename}/.devcontainer/extensions/ms-python.python-2026.0.0-linux-x64.vsix",
+                "/workspaces/${localWorkspaceFolderBasename}/.devcontainer/extensions/ms-python.vscode-pylance-2025.10.4.vsix",
+                "/workspaces/${localWorkspaceFolderBasename}/.devcontainer/extensions/ms-azuretools.vscode-docker-2.0.0.vsix",
+                "/workspaces/${localWorkspaceFolderBasename}/.devcontainer/extensions/be5invis.toml-0.6.0-web.vsix",
+                "/workspaces/${localWorkspaceFolderBasename}/.devcontainer/extensions/gigacode-vscode-25.11.671.vsix"
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": "/usr/local/bin/python",
+                "python.languageServer": "Pylance",
+                "python.linting.enabled": true,
+                "python.linting.pylintEnabled": true,
+                "terminal.integrated.defaultProfile.linux": "bash"
+            }
+        }
+    },
+    
+    // Установка Prefect перед запуском сервера
+    "postCreateCommand": "mkdir -p ${containerWorkspaceFolder}/tmp/prefect && pip install --upgrade pip && pip install -r ${containerWorkspaceFolder}/requirements.txt",
+    // Запуск сервера Prefect каждый раз при открытии контейнера
+    // Используем nohup, чтобы сервер не умирал при закрытии терминала в VS Code
+    "postStartCommand": "prefect server start > /workspaces/prefect_testing/tmp/prefect/prefect.log 2>&1 &",
+
+    "remoteUser": "vscode",
+    "containerEnv": {
+        "PREFECT_API_URL": "http://127.0.0.1:4200/api",
+        "PREFECT_SERVER_API_HOST": "0.0.0.0",
+        "PREFECT_SERVER_API_PORT": "4200",
+        "PREFECT_DATA_DIR": "${containerWorkspaceFolder}/tmp/prefect",
+        // Указываем пути явно, не ссылаясь на соседние переменные
+        "PREFECT_HOME": "${containerWorkspaceFolder}/tmp/prefect/.prefect_home",
+        "PYTHONPATH": "${containerWorkspaceFolder}/tmp",
+        "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "forwardPorts": [4200]
+}
