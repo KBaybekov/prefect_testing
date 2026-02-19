@@ -1,6 +1,7 @@
 services:
   worker:
     image: ${PREFECT_IMAGE}
+    container_name: prefect_worker_${WORK_POOL_NAME}
     restart: always
     hostname: $HOSTNAME
     environment:
@@ -8,6 +9,8 @@ services:
       - PYTHONDONTWRITEBYTECODE="1"
       - LOG_FOLDER="${ANSIBLE_LOGS_PATH}"
     volumes:
+      - /etc/localtime:/etc/localtime:ro  # КРИТИЧНО
+      - /etc/timezone:/etc/timezone:ro  # КРИТИЧНО
       - /var/run/docker.sock:/var/run/docker.sock  # КРИТИЧНО
       - ${ANSIBLE_CODE_PATH}:${ANSIBLE_CODE_PATH}
       - ${ANSIBLE_DATA_PATH}:${ANSIBLE_DATA_PATH}
