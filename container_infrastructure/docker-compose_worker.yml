@@ -4,12 +4,15 @@ services:
     restart: always
     hostname: $HOSTNAME
     environment:
-      - PREFECT_API_URL=http://${SERVER_IP}:${SERVER_PORT}/api
+      - PREFECT_API_URL="http://${SERVER_IP}:${SERVER_PORT}/api"
+      - PYTHONDONTWRITEBYTECODE="1"
+      - LOG_FOLDER="${ANSIBLE_LOGS_PATH}"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock  # КРИТИЧНО
       - ${ANSIBLE_CODE_PATH}:${ANSIBLE_CODE_PATH}
       - ${ANSIBLE_DATA_PATH}:${ANSIBLE_DATA_PATH}
       - ${ANSIBLE_RESULTS_PATH}:${ANSIBLE_RESULTS_PATH}
+      - ${ANSIBLE_LOGS_PATH}:${ANSIBLE_LOGS_PATH}
     working_dir: /opt/prefect/code
     # Используем переменную для имени пула
     command: /bin/sh -c 'pip install prefect-docker && prefect worker start --pool "${WORK_POOL_NAME}" --type "docker" --name ${ANSIBLE_HOSTNAME} --work-queue ${ANSIBLE_HOSTGROUP}'

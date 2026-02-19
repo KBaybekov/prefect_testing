@@ -16,6 +16,7 @@
         ANSIBLE_CODE_PATH: "/mnt/cephfs8_rw/nanopore2/service/code"
         ANSIBLE_RESULTS_PATH: "/mnt/cephfs8_rw/nanopore2/result"
         ANSIBLE_DATA_PATH: "/mnt/cephfs8_ro/nanopore"
+        ANSIBLE_LOGS_PATH: "/mnt/cephfs8_rw/nanopore2/logs"        
       community.docker.docker_compose_v2:
         project_src: "{{ project_dir }}"
         files:
