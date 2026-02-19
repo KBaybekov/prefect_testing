@@ -5,7 +5,7 @@
   gather_facts: false
   vars:
     # Путь, где будут лежать файлы проекта на удаленном сервере
-    project_dir: "/mnt/cephfs8_rw/nanopore2/service/prefect/docker"
+    project_dir: "/mnt/cephfs8_rw/nanopore2/service/code/github/prefect_testing/container_infrastructure"
     compose_file_name: "docker-compose_worker.yml"
 
   tasks:
